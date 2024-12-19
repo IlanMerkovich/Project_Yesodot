@@ -1,0 +1,3 @@
+C:/Users/ilanz/CLionProjects/Project_Yesodot/cmake-build-debug/CMakeFiles/Project_Yesodot.dir
+C:/Users/ilanz/CLionProjects/Project_Yesodot/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ilanz/CLionProjects/Project_Yesodot/cmake-build-debug/CMakeFiles/rebuild_cache.dir
