@@ -486,3 +486,324 @@ void display_doctors_scheduled_app(int index){
         }
     }
 }
+int main()
+{
+    int choice=0;
+    while(true)
+    {
+        displayWelcomeScreen();
+        cin>>choice;
+        while(true){
+            int reg_log_choice=0;
+            //doctor//
+            //===================================================================================================//
+            if (choice==1){
+                displayFirstScreen();
+                cin>>reg_log_choice;
+                if (reg_log_choice==1){
+                    int index=Login_Doctor();
+                    if (index==-1) {
+                        cout << "Could not log you in! Please check your id or password!" << endl;
+                    }
+                    else{
+                        while(true){
+                            displayDoctorMenu();
+                            int d_menu_choice=0;
+                            cin>>d_menu_choice;
+                            if (d_menu_choice==1)
+                            {
+                                display_my_profile();
+                                int profile_choice;
+                                cin >> profile_choice;
+                                if (profile_choice == 1) {
+                                    display_doctors_details(index);
+                                }
+                                if (profile_choice == 2) {
+                                    display_doctors_changes();
+                                    int edit_choice = 0;
+                                    cin >> edit_choice;
+                                    if (edit_choice == 1) {
+                                        cout << "Enter your new phone number:";
+                                        string new_number;
+                                        cin >> new_number;
+                                        if (validate_phone_number(new_number)) {
+                                            Doctors[index].set_phone(new_number);
+                                            cout << "** Phone number changed successfully **" << endl;
+                                        } else
+                                            cout << "Invalid Phone number. Try again!" << endl;
+                                    }
+                                    if (edit_choice == 2) {
+                                        cout << "Enter you new Specialization: " << endl;
+                                        string new_spec;
+                                        cin >> new_spec;
+                                        Doctors[index].set_spec(new_spec);
+                                    }
+                                    if (edit_choice == 3) {
+                                        cout << "Enter your new area of reception: " << endl;
+                                        string new_area;
+                                        cin >> new_area;
+                                        Doctors[index].set_area(new_area);
+                                    }
+                                }
+                            }
+                            if (d_menu_choice==2){
+                                display_doctors_scheduled_app(index);
+                                cout<<endl;
+                            }
+                            if (d_menu_choice==3){
+                                cout<<"Please select a date you will be unavailable:"<<endl;
+                                string unavail_date;
+                                cin>>unavail_date;
+                                for (int i = 0; i < Appointments.size(); ++i){
+                                    if (Appointments[i].get_date() == unavail_date && Appointments[i].get_doc_id() == Doctors[index].get_id()) {
+                                        Appointments[i].Make_Appointment_Unavail();
+                                    }
+                                }
+                            }
+                            if (d_menu_choice==4){
+                                if (calculate_doc_app_num(index)==0){
+                                    cout<<"You have no appointments yet"<<endl;
+                                }
+                                else{
+                                    display_doctors_scheduled_app(index);
+                                    cout<<endl;
+                                    int app_index=0;
+                                    cout<<"Please enter the index of the appointment you want to commit and add a summary:"<<endl;
+                                    cin>>app_index;
+                                    cin.ignore();
+                                    cout<<"Please enter your summary:"<<endl;
+                                    string summary;
+                                    getline(cin,summary);
+                                    cin.ignore();
+                                    Appointments[app_index].Add_Summary(summary);
+                                }
+                            }
+                            if (d_menu_choice==5){
+                                string date_gen;
+                                cout<<"Please enter the date you will work to generate appointments:"<<endl;
+                                cin>>date_gen;
+                                cout<<"You chose to generate appointments on the "<<date_gen<<endl;
+                                createAppointmentsForDate(date_gen,Doctors[index].get_id(),Doctors[index].get_receptionarea(),Doctors[index].get_specialization());
+                                cout<<endl;
+                            }
+                            if (d_menu_choice==6){
+                                cout<<"Displaying rating for: "<<Doctors[index].get_name()<<endl;
+                                cout<<"Your rating is: "<<calculate_doc_rating(index)<<" STARS!"<<endl;
+                            }
+                            if (d_menu_choice==7){
+                                cout<<"Are you sure you want to exit? 1-yes,0-no"<<endl;
+                                int exit_choice;
+                                cin>>exit_choice;
+                                if (exit_choice==1){
+                                    Save_all_data();
+                                    break;
+                                }
+                                else
+                                    continue;
+                            }
+                        }
+                    }
+                }
+                if (reg_log_choice==2){
+                    Doctors.push_back(Register_doctor());
+                    reg_log_choice=0;
+                }
+                if (reg_log_choice==3){
+                    cout<<"====================="<<endl;
+                    cout<<"Exiting to main menu!"<<endl;
+                    cout<<"====================="<<endl;
+                    Save_all_data();
+                    break;
+                }
+            }
+
+            //===================================================================================================//
+            //patient//
+            if (choice==2){
+                displayFirstScreen();
+                cin >> reg_log_choice;
+                if (reg_log_choice == 1){
+                    int index=Login_Patient();
+                    if (index==-1){
+                        cout << "Could not log you in! Please check your id or password!" << endl;
+                    }
+                    else{
+                        while(true){
+                            displayPatientMenu();
+                            int p_menu_choice=0;
+                            cin>>p_menu_choice;
+                            if (p_menu_choice==1) {
+                                display_my_profile();
+                                int profile_choice = 0;
+                                cin >> profile_choice;
+                                if (profile_choice == 1) {
+                                    display_patients_details(index);
+                                    cout<<endl;}
+                                if (profile_choice==2){
+                                    display_patient_changes();
+                                    cout<<endl;
+                                    int change_choice = 0;
+                                    cin >> change_choice;
+                                    if (change_choice == 1) {
+                                        cout << "Enter your new phone number:";
+                                        string new_number;
+                                        cin >> new_number;
+                                        if (validate_phone_number(new_number)) {
+                                            Patients[index].set_phone(new_number);
+                                            cout << "** Phone number changed successfully **" << endl;
+                                        }
+                                        else
+                                            cout << "Invalid Phone number. Try again!" << endl;
+                                        cout<<endl;
+                                    }
+                                    if (change_choice == 2) {
+                                        cout << "Enter your new health care provider:" << endl;
+                                        string new_health;
+                                        cin >> new_health;
+                                        Patients[index].set_healt_care(new_health);
+                                        cout<<endl;
+                                    }
+                                }
+                            }
+                            if (p_menu_choice==2){
+                                cout<<"*******My Appointments*******"<<endl;
+                                Print_Appointments(index);
+                            }
+                            if (p_menu_choice==3){
+                                cout<<"*******Appointments Bank with filtering*******"<<endl;
+                                string chosen_date,area,specialization;
+                                int filter_choice=0;
+                                cout<<"IMPORTANT NOTICE - TO BOOK APPOINTMENT USE INDEX!"<<endl;
+                                cout<<"How would you like to filter the appointment?: 1-Date / 2-Area / 3-Specialization "<<endl;
+                                cin>>filter_choice;
+                                if (filter_choice==1){
+                                    cout<<"Enter desired Date:"<<endl;
+                                    cin>>chosen_date;
+                                    int counter=0;
+                                    cout<<"Printing all appointments on: "<<chosen_date<<endl;
+                                    for (int i = 0; i < Appointments.size(); ++i){
+                                        if (Appointments[i].get_date()==chosen_date && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
+                                            Appointments[i].Print_Details();
+                                            cout<<" INDEX - "<<i<<" .Dr- "<<Get_Doctors_Name(Appointments[i].get_doc_id())<<endl;
+                                            counter++;
+                                        }
+                                    }
+                                    if (counter==0){
+                                        cout<<"No appointments to display!"<<endl;
+                                    }
+                                }
+                                if (filter_choice==2){
+                                    cout<<"Enter desired are: "<<endl;
+                                    cin>>area;
+                                    int counter=0;
+                                    cout<<"Printing all appointments in "<<area<<endl;
+                                    for (int i = 0; i < Appointments.size(); ++i) {
+                                        if (Appointments[i].get_area()==area && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
+                                            Appointments[i].Print_Details();
+                                            cout<<" INDEX - "<<i<<" .Dr- "<<Get_Doctors_Name(Appointments[i].get_doc_id())<<endl;
+                                            counter++;
+                                        }
+                                    }
+                                    if (counter==0){
+                                        cout<<"No appointments to display!"<<endl;
+                                    }
+                                }
+                                if (filter_choice==3){
+                                    cout<<"Enter desired specialization"<<endl;
+                                    cin>>specialization;
+                                    int counter=0;
+                                    cout<<"Printing all appointments for specialization: "<<specialization<<endl;
+                                    for (int i = 0; i < Appointments.size(); ++i){
+                                        if (Appointments[i].get_specialization()==specialization && !Appointments[i].check_if_booked() && !Appointments[i].check_if_unvail()){
+                                            Appointments[i].Print_Details();
+                                            cout<<" INDEX - "<<i<<" .Dr- "<<Get_Doctors_Name(Appointments[i].get_doc_id())<<endl;
+                                            counter++;
+                                        }
+                                    }
+                                    if (counter==0){
+                                        cout<<"No appointments to display!"<<endl;
+                                    }
+                                }
+                            }
+                            if (p_menu_choice==4){
+                                BookAppointmentByIndex(index);
+                            }
+                            if (p_menu_choice==5){
+                                int delete_index=0;
+                                cout<<endl;
+                                cout<<"*******Appointment Canceling*******"<<endl;
+                                cout<<"Here are your appointments: "<<endl;
+                                Print_Appointments(index);
+                                cout<<endl;
+                                cout<<"Enter the index of the appointment you want to cancel:"<<endl;
+                                cin>>delete_index;
+                                Appointments[delete_index].Cancel_Appointment();
+                                cout<<"Appointment cancelled successfully!"<<endl;
+                            }
+                            if (p_menu_choice==6){
+                                Print_Past_Appointments(index);
+                                cout<<endl;
+                            }
+                            if (p_menu_choice==7){
+                                int counter=0,rating=0;
+                                cout<<endl;
+                                cout<<"*******Doctor Rating*******"<<endl;
+                                cout<<endl;
+                                cout<<"Here are your past appointments"<<endl;
+                                for (int i = 0; i < Appointments.size(); ++i){
+                                    if (Appointments[i].get_pat_id() == Patients[index].get_id() &&
+                                        Appointments[i].check_if_over() && Appointments[i].get_rating()==0) {
+                                        cout << Appointments[i].get_date() << " at "<< Appointments[i].get_time() <<" INDEX- "<<i<<endl;
+                                        counter++;
+                                    }
+                                }
+                                if (counter!=0){
+                                    int index_rate;
+                                    cout<<"Enter the index of the appointment you want to rate:"<<endl;
+                                    cin>>index_rate;
+                                    cout<<"Enter your rating:"<<endl;
+                                    cin>>rating;
+                                    Appointments[index_rate];
+                                    cout<<"Rating added successfully!"<<endl;
+                                    Appointments[index_rate].Rate_doc(rating);
+                                }
+                                else{
+                                    cout<<"No appointments to rate! "<<endl;
+                                }
+                            }
+                            if (p_menu_choice==8){
+                                digitalFirstAidGuide();
+                            }
+                            if (p_menu_choice==9){
+                                cout<<"Are you sure you want to exit? 1-yes,0-no"<<endl;
+                                int exit_choice;
+                                cin>>exit_choice;
+                                if (exit_choice==1){
+                                    Save_all_data();
+                                    break;
+                                }
+                                else
+                                    continue;
+                            }
+                        }
+                    }
+                }
+                if (reg_log_choice == 2){
+                    Patients.push_back(Register_patient());
+                }
+                //exit to main menu//
+                if (reg_log_choice==3){
+                    cout<<"====================="<<endl;
+                    cout<<"Exiting to main menu!"<<endl;
+                    cout<<"====================="<<endl;
+                    Save_all_data();
+                    break;
+                }
+            }
+            if (choice==3){
+                Save_all_data();
+                exit(0);
+            }
+        }
+    }
+}
