@@ -1,6 +1,4 @@
-//
-// Created by ilanz on 09/12/2024.
-//
+
 #include "iostream"
 #include "string"
 #include "Patient.h"

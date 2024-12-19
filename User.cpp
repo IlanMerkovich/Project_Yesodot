@@ -1,6 +1,3 @@
-//
-// Created by ilanz on 21/11/2024.
-//
 
 #include "User.h"
 #include "string"

@@ -1,6 +1,4 @@
-//
-// Created by ilanz on 09/12/2024.
-//
+
 
 #ifndef PROJECT_PATIENT_H
 #define PROJECT_PATIENT_H

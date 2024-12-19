@@ -1,6 +1,3 @@
-//
-// Created by ilanz on 21/11/2024.
-//
 
 #ifndef PROJECT_USER_H
 #define PROJECT_USER_H
