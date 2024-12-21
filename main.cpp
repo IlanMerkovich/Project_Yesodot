@@ -6,7 +6,7 @@
 #include "string"
 #include "vector"
 #include "limits"
-
+#include "set"
 #define PATIENTSFILE "Patients.txt"
 #define DOCTORSFILE "Doctors.txt"
 #define APPOINTMENTSFILE "Appointments.txt"
@@ -275,6 +275,27 @@ void display_patient_changes(){
     cout << "*************************************************" << endl;
     cout << endl;
 }
+set<string> Find_Specialization_Available(){
+    set<string>result;
+    for (int i = 0; i < Appointments.size(); ++i) {
+        result.insert(Appointments[i].get_specialization());
+    }
+    return result;
+}
+set<string> Find_Date_Available(){
+    set<string>result;
+    for (int i = 0; i < Appointments.size(); ++i){
+        result.insert(Appointments[i].get_date());
+    }
+    return result;
+}
+set<string> Find_Area_Available(){
+    set<string>result;
+    for (int i = 0; i < Appointments.size(); ++i){
+        result.insert(Appointments[i].get_area());
+    }
+    return result;
+}
 
 int calculate_doc_app_num(int index){
     int counter=0;
@@ -368,14 +389,6 @@ void Print_Past_Appointments(int index){
         cout<<"No appointments to display!"<<endl;
     }
 }
-int Find_Appointment_Index(string date,string time){
-    for (int i = 0; i < Appointments.size(); ++i){
-        if (Appointments[i].get_time()==time && Appointments[i].get_date()==date){
-            return i;
-        }
-    }
-}
-
 void digitalFirstAidGuide() {
     int choice;
     do {
@@ -677,6 +690,12 @@ int main()
                                 cout<<"How would you like to filter the appointment?: 1-Date / 2-Area / 3-Specialization "<<endl;
                                 cin>>filter_choice;
                                 if (filter_choice==1){
+                                    set<string>result=Find_Date_Available();
+                                    cout<<"Available dates are:"<<endl;
+                                    for(auto i:result){
+                                        cout<<i<<" , ";
+                                    }
+                                    cout<<endl;
                                     cout<<"Enter desired Date:"<<endl;
                                     cin>>chosen_date;
                                     int counter=0;
@@ -693,7 +712,13 @@ int main()
                                     }
                                 }
                                 if (filter_choice==2){
-                                    cout<<"Enter desired are: "<<endl;
+                                    set<string>result=Find_Area_Available();
+                                    cout<<"Available areas are:"<<endl;
+                                    for(auto i:result){
+                                        cout<<i<<" , ";
+                                    }
+                                    cout<<endl;
+                                    cout<<"Enter desired area: "<<endl;
                                     cin>>area;
                                     int counter=0;
                                     cout<<"Printing all appointments in "<<area<<endl;
@@ -709,6 +734,12 @@ int main()
                                     }
                                 }
                                 if (filter_choice==3){
+                                    set<string>result=Find_Specialization_Available();
+                                    cout<<"Available specialization are:"<<endl;
+                                    for(auto i:result){
+                                        cout<<i<<" , ";
+                                    }
+                                    cout<<endl;
                                     cout<<"Enter desired specialization"<<endl;
                                     cin>>specialization;
                                     int counter=0;
